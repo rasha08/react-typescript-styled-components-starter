@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, Suspense } from 'react';
+import { Router, View } from 'react-navi';
+import routes from './routing/routes';
+import { ThemeProvider } from 'styled-components';
+import { useSelector } from 'react-redux';
+import { StoreState } from './store';
+import { AppThemeState } from './store/theme/types';
+import Header from './shared/components/Header/Header';
 
-function App() {
+const App: FC = () => {
+  const { theme } = useSelector<StoreState, AppThemeState>(s => s.theme);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Header />
+      <Router routes={routes}>
+        <Suspense fallback={'loading...'}>
+          <View />
+        </Suspense>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
